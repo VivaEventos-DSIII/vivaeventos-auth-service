@@ -1,9 +1,11 @@
 package com.vivaeventos.authservice.controller;
 
 import com.vivaeventos.authservice.dto.MessageResponse;
+import com.vivaeventos.authservice.exception.AdminCreationException;
 import com.vivaeventos.authservice.exception.EmailAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -33,5 +35,17 @@ public class GlobalExceptionHandler {
     public ResponseEntity<MessageResponse> handleBadCredentials(BadCredentialsException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(new MessageResponse("Credenciales incorrectas"));
+    }
+
+    @ExceptionHandler(AdminCreationException.class)
+    public ResponseEntity<MessageResponse> handleAdminCreationException(AdminCreationException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new MessageResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<MessageResponse> handleAccessDeniedException(AccessDeniedException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new MessageResponse("No tienes permisos para acceder a este recurso"));
     }
 }
