@@ -34,6 +34,17 @@ public class JwtService {
         return extractAllClaims(token).getSubject();
     }
 
+    /**
+     * Extrae el rol del usuario desde el payload del JWT.
+     * El rol fue incluido como claim "role" al generar el token en AuthService.
+     *
+     * @param token JWT del cual extraer el rol
+     * @return rol del usuario (ROLE_USER o ROLE_ADMIN)
+     */
+    public String extractRole(String token) {
+        return (String) extractAllClaims(token).get("role");
+    }
+
     public boolean isTokenValid(String token) {
         try {
             extractAllClaims(token);
