@@ -1,6 +1,7 @@
 package com.vivaeventos.authservice.controller;
 
 import com.vivaeventos.authservice.dto.AuthResponse;
+import com.vivaeventos.authservice.dto.CreateAdminRequest;
 import com.vivaeventos.authservice.dto.LoginRequest;
 import com.vivaeventos.authservice.dto.MessageResponse;
 import com.vivaeventos.authservice.dto.RegisterRequest;
@@ -11,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpHeaders;
 
@@ -34,6 +36,12 @@ public class AuthController {
         return ResponseEntity.ok(authService.login(request));
     }
 
+    @PostMapping("/admin/register")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<MessageResponse> registerAdmin(@Valid @RequestBody CreateAdminRequest request) {
+        authService.registerAdmin(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new MessageResponse("Administrador creado exitosamente"));
     @GetMapping("/validate")
     public ResponseEntity<ValidateResponse> validate(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
