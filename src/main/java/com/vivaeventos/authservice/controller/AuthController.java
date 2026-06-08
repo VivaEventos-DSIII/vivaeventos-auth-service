@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpHeaders;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -42,6 +42,8 @@ public class AuthController {
         authService.registerAdmin(request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new MessageResponse("Administrador creado exitosamente"));
+    }
+
     @GetMapping("/validate")
     public ResponseEntity<ValidateResponse> validate(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
