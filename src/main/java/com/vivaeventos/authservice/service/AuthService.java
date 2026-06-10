@@ -34,10 +34,13 @@ public class AuthService {
             throw new EmailAlreadyExistsException("El email ya está registrado");
         }
 
+        String role = (request.getRole() != null && !request.getRole().isBlank())
+                ? request.getRole() : "ROLE_USER";
+
         User user = User.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role("ROLE_USER")
+                .role(role)
                 .enabled(true)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
